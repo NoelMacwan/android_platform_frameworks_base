@@ -757,6 +757,7 @@ public final class DisplayManagerService extends SystemService {
 
         updateLogicalDisplaysLocked();
         scheduleTraversalLocked(false);
+        --mNextNonDefaultDisplayId;
     }
 
     private void applyGlobalDisplayStateLocked(List<Runnable> workQueue) {
