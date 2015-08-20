@@ -423,6 +423,15 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                                 com.android.internal.R.bool.config_localDisplaysMirrorContent)) {
                         mInfo.flags |= DisplayDeviceInfo.FLAG_OWN_CONTENT_ONLY;
                     }
+
+                   /*
+                     * maru
+                     *
+                     * Hook to toggle HDMI mirroring of the default display.
+                     */
+                    if (!SystemProperties.getBoolean("persist.maru.hdmi.mirroring", false)) {
+                        mInfo.flags |= DisplayDeviceInfo.FLAG_OWN_CONTENT_ONLY;
+                    }
                 }
             }
             return mInfo;
