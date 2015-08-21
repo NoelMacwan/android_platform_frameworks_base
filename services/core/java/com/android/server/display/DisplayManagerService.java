@@ -170,7 +170,7 @@ public final class DisplayManagerService extends SystemService {
     // List of all logical displays indexed by logical display id.
     private final SparseArray<LogicalDisplay> mLogicalDisplays =
             new SparseArray<LogicalDisplay>();
-    private int mNextNonDefaultDisplayId = Display.DEFAULT_DISPLAY + 1;
+    private int mNextNonDefaultDisplayId = Display.MARU_DESKTOP_DISPLAY + 1;
 
     // List of all display transaction listeners.
     private final CopyOnWriteArrayList<DisplayTransactionListener> mDisplayTransactionListeners =
@@ -757,7 +757,6 @@ public final class DisplayManagerService extends SystemService {
 
         updateLogicalDisplaysLocked();
         scheduleTraversalLocked(false);
-        --mNextNonDefaultDisplayId;
     }
 
     private void applyGlobalDisplayStateLocked(List<Runnable> workQueue) {
@@ -787,6 +786,8 @@ public final class DisplayManagerService extends SystemService {
         DisplayDeviceInfo deviceInfo = device.getDisplayDeviceInfoLocked();
         boolean isDefault = (deviceInfo.flags
                 & DisplayDeviceInfo.FLAG_DEFAULT_DISPLAY) != 0;
+        boolean isMaruDesktop = (deviceInfo.flags
+                & DisplayDeviceInfo.FLAG_MARU_DESKTOP) != 0;
         if (isDefault && mLogicalDisplays.get(Display.DEFAULT_DISPLAY) != null) {
             Slog.w(TAG, "Ignoring attempt to add a second default display: " + deviceInfo);
             isDefault = false;
@@ -798,7 +799,7 @@ public final class DisplayManagerService extends SystemService {
             return null;
         }
 
-        final int displayId = assignDisplayIdLocked(isDefault);
+        final int displayId = assignDisplayIdLocked(isDefault, isMaruDesktop);
         final int layerStack = assignLayerStackLocked(displayId);
 
         LogicalDisplay display = new LogicalDisplay(displayId, layerStack, device);
@@ -821,8 +822,14 @@ public final class DisplayManagerService extends SystemService {
         return display;
     }
 
-    private int assignDisplayIdLocked(boolean isDefault) {
-        return isDefault ? Display.DEFAULT_DISPLAY : mNextNonDefaultDisplayId++;
+    private int assignDisplayIdLocked(boolean isDefault, boolean isMaruDesktop) {
+        if (isDefault) {
+            return Display.DEFAULT_DISPLAY;
+        } else if (isMaruDesktop) {
+            return Display.MARU_DESKTOP_DISPLAY;
+        } else {
+            return mNextNonDefaultDisplayId++;
+        }
     }
 
     private int assignLayerStackLocked(int displayId) {
