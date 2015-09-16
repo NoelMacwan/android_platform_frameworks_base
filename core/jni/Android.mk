@@ -261,6 +261,20 @@ LOCAL_SHARED_LIBRARIES := \
     libnativeloader \
     libmemunreachable \
 
+#--------------------------------------------------------
+# maru
+
+LOCAL_SRC_FILES += \
+	android_mperspective_PerspectiveManager.cpp
+
+LOCAL_C_INCLUDES += \
+	device/lge/hammerhead/maru/include
+
+LOCAL_SHARED_LIBRARIES += \
+	libperspective
+
+#--------------------------------------------------------
+
 LOCAL_SHARED_LIBRARIES += \
     libhwui \
     libdl
