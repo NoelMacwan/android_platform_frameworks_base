@@ -104,10 +104,10 @@ public final class Display {
     /**
      * maru
      *
-     * Fixed display id for the maru desktop display.
+     * Fixed display id for the default external display. Currently only HDMI.
      * @hide
      */
-    public static final int MARU_DESKTOP_DISPLAY = 1;
+    public static final int DEFAULT_EXTERNAL_DISPLAY = 1;
 
     /**
      * Display flag: Indicates that the display supports compositing content
